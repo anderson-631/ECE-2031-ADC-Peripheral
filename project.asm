@@ -1,3 +1,51 @@
-
 ORG 0
 
+
+NEWSAMPLE:
+IN Switches
+STORE CHANNEL
+
+SKIP_1:
+LOAD CHANNEL;
+OUT Hex1 ; Display channel number
+OUT ADC_Config; 
+
+SAMPLE:
+IN ADC_Ready
+JZERO SAMPLE ; keep sampling if sentinel value is detected
+
+IN ADC_Data
+OUT Hex0
+; IN ADC_Config
+; OUT Hex1
+
+JUMP NEWSAMPLE
+
+ORG &H80
+BITMASK: DW &H8800
+CHANNEL: DW 0
+MASK: DW &H0FFF
+ONE: DW 1
+
+NUM_LEDS: DW &H000A
+THRESHOLD: DW &H019A
+STEP: DW &H019A
+LED_POS: DW &H0001
+VAL: DW 0
+CUR_TIME: DW 0
+TIME_LIMIT: DW 100
+
+NEXT_TARGET_LOCATION: DW 1
+TARGET_LOCATION: DW 1
+LEFT: DW &H400
+
+POINTS: DW 0
+
+Switches:  EQU 000
+LEDs:      EQU 001
+Timer:     EQU 002
+Hex0:      EQU 004
+Hex1:      EQU 005
+ADC_Config: 		EQU &HC0
+ADC_Data:  EQU &HC1
+ADC_Ready: EQU &HC2
